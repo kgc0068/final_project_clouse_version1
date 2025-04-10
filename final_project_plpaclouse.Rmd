@@ -1,0 +1,189 @@
+---
+title: "Final Project"
+author: "Katie Clouse"
+date: "2025-04-07"
+output: 
+    pdf_document:
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Reading in CAV data and packages
+```{r}
+cavdata <- read.csv("C:/Users/katie/OneDrive/Documents/CAV_project/cav_results_3.16.25.csv")
+library(ggplot2)
+library(tidyverse)
+library(tidyr)
+library(ggpubr)
+```
+Descriptives of CAV data
+```{r}
+# Age
+ggplot(cavdata, aes(Age)) +
+ geom_density(fill = "blue", alpha = 0.7) +
+  labs(title = "Age Density Plot", x = "Age", y = "Density") +
+  theme_minimal()
+
+# Gender
+library(dplyr)
+cavdata <- cavdata %>%
+  mutate(Gender = case_when(
+    Gender == 1 ~ 1,
+    Gender == 2 ~ 2,
+    Gender %in% 4:7 ~ 3,  
+    TRUE ~ Gender         
+  ))
+cavdata$Gender <- factor(cavdata$Gender,
+                         levels = c(1, 2, 3),
+                         labels = c("Male", "Female", "Other/Prefer not to say"))
+ggplot(cavdata, aes(x = Gender)) +
+  geom_bar(fill = "skyblue", color = "black") +
+  labs(title = "Gender Distribution", x = "Gender", y = "Count") +
+  theme_minimal()
+
+#Role
+
+#Service Type
+
+# Years in military 
+ggplot(cavdata, aes(Years_in_military)) +
+ geom_histogram(fill = "red", alpha = 0.7, bins = 10) +
+  labs(title = "Years Served Density Plot", x = "Years", y = "Density") +
+  theme_minimal()
+```
+Likert item scores
+```{r}
+cavdata.likert<- cavdata%>%
+  select(Liked_art_supplies, Enjoyed_art_exercises, CAV_improved_mood, CAV_provided_strategies, Would_recommend_CAV)
+
+#creating the proper levels
+cavdata.likert$Liked_art_supplies <- factor(
+  cavdata.likert$Liked_art_supplies,
+  levels = c("1", "2", "3", "4", "5", "6")  
+)
+
+# Plotting with the correct labels 
+ggplot(cavdata.likert, aes(x = Liked_art_supplies)) +  
+  geom_bar(fill = "skyblue", color = "black") +
+  scale_x_discrete(labels = c(
+    "1" = "Strongly Agree",
+    "2" = "Somewhat Agree",
+    "3" = "Neither Agree nor Disagree",
+    "4" = "Somewhat Disagree",
+    "5" = "Strongly Disagree",
+    "6" = "Don't Know/Unsure"
+  )) +
+  labs(title = "#1 Likert: I liked the art materials that were supplied.", x = "Likert Ratings", y = "Count") +
+  theme_minimal()
+
+
+# Likert item 2
+cavdata.likert$Enjoyed_art_exercises <- factor(
+  cavdata.likert$Enjoyed_art_exercises,
+  levels = c("1", "2", "3", "4", "5", "6") 
+)
+
+# Plot
+ggplot(cavdata.likert, aes(x = Enjoyed_art_exercises)) +  
+  geom_bar(fill = "forestgreen", color = "black") +
+  scale_x_discrete(labels = c(
+    "1" = "Strongly Agree",
+    "2" = "Somewhat Agree",
+    "3" = "Neither Agree nor Disagree",
+    "4" = "Somewhat Disagree",
+    "5" = "Strongly Disagree",
+    "6" = "Don't Know/Unsure"
+  )) +
+  labs(title = "#2 Likert: I enjoyed using the art-based wellness exercises", x = "Likert Ratings", y = "Count") +
+  theme_minimal()
+
+# Likert item 3
+cavdata.likert$CAV_improved_mood <- factor(
+  cavdata.likert$CAV_improved_mood,
+  levels = c("1", "2", "3", "4", "5", "6") 
+)
+
+# Plot
+ggplot(cavdata.likert, aes(x = CAV_improved_mood)) +  
+  geom_bar(fill = "orange", color = "black") +
+  scale_x_discrete(labels = c(
+    "1" = "Strongly Agree",
+    "2" = "Somewhat Agree",
+    "3" = "Neither Agree nor Disagree",
+    "4" = "Somewhat Disagree",
+    "5" = "Strongly Disagree",
+    "6" = "Don't Know/Unsure"
+  )) +
+  labs(title = "#3 Likert: Using the CAV Book improved my mood.", x = "Likert Ratings", y = "Count") +
+  theme_minimal()
+
+
+# Likert item 4
+cavdata.likert$CAV_provided_strategies <- factor(
+  cavdata.likert$CAV_provided_strategies,
+  levels = c("1", "2", "3", "4", "5", "6") 
+)
+
+# Plot
+ggplot(cavdata.likert, aes(x = CAV_provided_strategies)) +  
+  geom_bar(fill = "pink", color = "black") +
+  scale_x_discrete(labels = c(
+    "1" = "Strongly Agree",
+    "2" = "Somewhat Agree",
+    "3" = "Neither Agree nor Disagree",
+    "4" = "Somewhat Disagree",
+    "5" = "Strongly Disagree",
+    "6" = "Don't Know/Unsure"
+  )) +
+  labs(title = "#4 Likert: The CAV Book provided me with strategies to work through personal challenges.", x = "Likert Ratings", y = "Count") +
+  theme_minimal()
+
+
+# Likert item 5
+cavdata.likert$Would_recommend_CAV <- factor(
+  cavdata.likert$Would_recommend_CAV,
+  levels = c("1", "2", "3", "4", "5", "6") 
+)
+
+# Plot
+ggplot(cavdata.likert, aes(x = Would_recommend_CAV)) +  
+  geom_bar(fill = "purple", color = "black") +
+  scale_x_discrete(labels = c(
+    "1" = "Strongly Agree",
+    "2" = "Somewhat Agree",
+    "3" = "Neither Agree nor Disagree",
+    "4" = "Somewhat Disagree",
+    "5" = "Strongly Disagree",
+    "6" = "Don't Know/Unsure"
+  )) +
+  labs(title = "#5 Likert: I would recommend the CAV Book to others with military experience.", x = "Likert Ratings", y = "Count") +
+  theme_minimal()
+```
+Correlations between Likert items 
+```{r}
+cor.test(cavdata$CAV_improved_mood, cavdata$CAV_provided_strategies, data = cavdata)
+cor.test(cavdata$Liked_art_supplies, cavdata$CAV_improved_mood, data = cavdata)
+cor.test(cavdata$Enjoyed_art_exercises, cavdata$CAV_improved_mood, data = cavdata)
+cor.test(cavdata$Would_recommend_CAV, cavdata$CAV_improved_mood, data = cavdata)
+```
+Interactions: 
+```{r}
+lm.interaction <- lm(Age ~ Years_in_military*Enjoyed_art_exercises, data = cavdata)
+print(lm.interaction)
+
+lm.interaction2 <- lm(Age ~ Years_in_military*CAV_improved_mood, data = cavdata)
+print(lm.interaction2)
+
+lm.interaction3 <- lm(Age~Years_in_military*Would_recommend_CAV, data = cavdata)
+print(lm.interaction3)
+
+lm.interaction4 <- lm(Age~Years_in_military*CAV_provided_strategies, data = cavdata)
+print(lm.interaction4)
+
+lm.interaction5 <- lm(Age~Years_in_military*Liked_art_supplies, data = cavdata)
+print(lm.interaction5)
+```
+
+[link to my github](https://github.com/kgc0068/final_project_clouse)
