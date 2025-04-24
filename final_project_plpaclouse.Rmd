@@ -10,6 +10,15 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Methods
+This is archival data from a Qualtrics survey for the Creative Arts for Veterans (CAV), an art therapy inspired self-paced book. Participants who have some connection with the military whether they are active, reserved
+or married to someone in the service are encouraged to partake in this resource. Participants are guided through
+an art-therapy inspired book, which will teach them self-regulation skills to cope with adverse life events through a military lens. [Here is the link to the Creative Arts for vets webpage, which was created by Indiana
+University.] (https://rural.indiana.edu/focus/arts-culture/creative-arts-for-vets/index.html)
+
+# Purpose
+The purpose of this project is to visualize the data, which was collected since June of 2023. 
+
 Reading in CAV data and packages
 ```{r}
 cavdata <- read.csv("cav_results_3.16.25.csv")
@@ -164,9 +173,28 @@ ggplot(cavdata.likert, aes(x = Would_recommend_CAV)) +
 Correlations between Likert items 
 ```{r}
 cor.test(cavdata$CAV_improved_mood, cavdata$CAV_provided_strategies, data = cavdata)
+ggplot(cavdata.likert, aes(x = CAV_improved_mood, y = CAV_provided_strategies)) +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_point() +
+  labs(title = "Relationship between improved mood and strategies provided")
+
 cor.test(cavdata$Liked_art_supplies, cavdata$CAV_improved_mood, data = cavdata)
+ggplot(cavdata.likert, aes(x = Liked_art_supplies, y = CAV_improved_mood)) +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_point() +
+  labs(title = "Relationship between art supplies and improved mood")
+
 cor.test(cavdata$Enjoyed_art_exercises, cavdata$CAV_improved_mood, data = cavdata)
+ggplot(cavdata.likert, aes(x = Enjoyed_art_exercises, y = CAV_improved_mood)) +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_point() +
+  labs(title = "Relationship between individuals enjoying art supplies and improved mood")
+
 cor.test(cavdata$Would_recommend_CAV, cavdata$CAV_improved_mood, data = cavdata)
+ggplot(cavdata.likert, aes(x = Would_recommend_CAV, y = CAV_improved_mood)) +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_point() +
+  labs(title = "Relationship between those who would recommend CAV and their improved mood")
 ```
 Interactions: 
 ```{r}
